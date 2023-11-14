@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from .models import MenuItem, Cart, Category, Order, OrderItem
+from .models import *
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from rest_framework.validators import UniqueTogetherValidator
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
@@ -70,3 +71,27 @@ class OrderInsertSerializer(serializers.ModelSerializer):
     class Meta():
         model = Order
         fields = ['delivery_crew']
+
+
+
+class RatingSerializer (serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+            queryset=User.objects.all(),
+            default=serializers.CurrentUserDefault()
+    )
+
+    class Meta:
+        model = Rating
+        fields = ['user', 'menuitem_id', 'rating']
+
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Rating.objects.all(),
+                fields=['user', 'menuitem_id']
+            )
+        ]
+
+        extra_kwargs = {
+            'rating': {'min_value': 0, 'max_value':5},
+        }
+

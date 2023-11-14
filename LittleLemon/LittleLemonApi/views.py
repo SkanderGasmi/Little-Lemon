@@ -5,11 +5,12 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseBadRequest
 from django.contrib.auth.models import Group, User
-from .models import Category, MenuItem, Cart, Order, OrderItem
-from .serializers import ManagerListSerializer, CategorySerializer, MenuItemSerializer, CartSerializer, CartAddSerializer, CartRemoveSerializer,SingleOrderSerializer, OrderSerializer, OrderInsertSerializer
+from .models import *
+from .serializers import *
 from .permissions import IsManager, IsDeliveryCrew
 from datetime import date
 import math
+
 
 class CategoriesView(generics.ListCreateAPIView):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
@@ -213,3 +214,17 @@ class SingleOrderView(generics.RetrieveUpdateAPIView):
         order_number = str(order.id)
         order.delete()
         return Response({'message':f'Order #{order_number} was deleted'}, status.HTTP_200_OK)
+
+
+
+
+
+class RatingsView(generics.ListCreateAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+
+    def get_permissions(self):
+        if(self.request.method=='GET'):
+            return []
+
+        return [IsAuthenticated()]
