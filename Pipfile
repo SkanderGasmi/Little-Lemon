@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+asgiref = "*"
+django = "==4.2.6"
+djangorestframework = "==3.14.0"
+mysqlclient = "==2.2.0"
+pytz = "==2023.3.post1"
+sqlparse = "==0.4.4"
+tzdata = "==2023.3"
+djangorestframework-simplejwt = "*"
+djoser = "*"
+djangorestframework-xml = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
